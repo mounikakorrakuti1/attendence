@@ -9,6 +9,25 @@ navLinks.forEach(link => {
     });
 });
 
+// Role-Based Login Handling
+document.getElementById('loginForm')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Example role-based login
+    if (username === 'teacher' && password === '1234') {
+        alert('Teacher logged in successfully!');
+        window.location.href = 'dashboard.html';
+    } else if (username === 'student' && password === '1234') {
+        alert('Student logged in successfully!');
+        window.location.href = 'view-attendance.html';
+    } else {
+        alert('Invalid login!');
+    }
+});
+
 // Attendance Tracking with Local Storage
 function saveAttendance(date, periodsAttended) {
     let attendance = JSON.parse(localStorage.getItem('attendance')) || [];
@@ -34,7 +53,7 @@ function loadAttendance() {
         const row = table.insertRow();
         row.insertCell(0).innerText = record.date;
         row.insertCell(1).innerText = record.periodsAttended;
-        row.insertCell(2).innerText = '8'; // Fixed periods per day
+        row.insertCell(2).innerText = '8';
     });
 }
 
@@ -46,27 +65,6 @@ function calculatePercentage() {
 
     let percentage = totalPeriods ? (periodsAttended / totalPeriods) * 100 : 0;
     document.getElementById('attendancePercentage').innerText = percentage.toFixed(2) + '%';
-}
-
-// QR Code Scanner Placeholder
-function scanQRCode() {
-    alert('QR Code Scanning feature coming soon!');
-}
-
-// Report Download
-function downloadReport() {
-    let attendance = JSON.parse(localStorage.getItem('attendance')) || [];
-    let csvContent = 'Date,Periods Attended,Total Periods\n';
-
-    attendance.forEach(record => {
-        csvContent += `${record.date},${record.periodsAttended},8\n`;
-    });
-
-    let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    let link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'attendance_report.csv';
-    link.click();
 }
 
 // On Page Load
